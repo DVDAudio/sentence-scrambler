@@ -1,273 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sentence Scrambler</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #004183;
-            --accent-color: #45a049;
-            --bg-gradient: linear-gradient(135deg, #f2f2f2 0%, #e0e0e0 100%);
-            --card-bg: #ffffff;
-            --transition-speed: 0.3s;
-        }
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-            transition: all var(--transition-speed) ease;
-        }
-        body {
-            background: var(--bg-gradient);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            padding: 2rem;
-        }
-        .container {
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-            padding: 2rem;
-        }
-        h1 {
-            text-align: center;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--primary-color);
-        }
-        textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            resize: vertical;
-            font-size: 1rem;
-            outline: none;
-        }
-        textarea:focus {
-            border-color: var(--primary-color);
-        }
-        .info {
-            margin-top: 0.5rem;
-            text-align: right;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        .options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            border-radius: 24px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            border-radius: 50%;
-            transition: transform var(--transition-speed);
-        }
-        input:checked + .slider {
-            background-color: var(--primary-color);
-        }
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-        .option-label {
-            display: flex;
-            align-items: center;
-            font-size: 0.95rem;
-            color: #333;
-            gap: 0.5rem;
-        }
-        .buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 1rem;
-        }
-        button {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.25rem;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background var(--transition-speed);
-        }
-        button:disabled {
-            background: #999;
-            cursor: not-allowed;
-        }
-        button:not(:disabled):hover {
-            background: var(--accent-color);
-        }
-        .output-card {
-            background: var(--card-bg);
-            border: 2px dashed #ccc;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1.5rem;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: #444;
-            position: relative;
-        }
-        .fade-in {
-            animation: fadeIn var(--transition-speed) ease;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        /* Copy button styling inside the output card */
-        #copyBtn {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.85rem;
-            background: var(--primary-color);
-        }
-        #copyBtn:hover {
-            background: var(--accent-color);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sentence Scrambler</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary-color: #004183;
+      --accent-color: #45a049;
+      --bg-gradient: linear-gradient(135deg, #f2f2f2 0%, #e0e0e0 100%);
+      --card-bg: #ffffff;
+      --transition-speed: 0.3s;
+    }
+    * { box-sizing:border-box; margin:0; padding:0;
+        font-family:'Poppins',sans-serif;
+        transition:all var(--transition-speed) ease; }
+    body {
+      background:var(--bg-gradient);
+      display:flex; justify-content:center;
+      align-items:flex-start; min-height:100vh;
+      padding:2rem;
+    }
+    .container {
+      background:var(--card-bg);
+      border-radius:12px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      max-width:600px; width:100%; padding:2rem;
+    }
+    h1 {
+      text-align:center; font-weight:600;
+      margin-bottom:1.5rem; color:var(--primary-color);
+    }
+    textarea {
+      width:100%; padding:1rem;
+      border:2px solid #ccc; border-radius:8px;
+      resize:vertical; font-size:1rem; outline:none;
+    }
+    textarea:focus { border-color:var(--primary-color); }
+    .info {
+      margin-top:0.5rem; text-align:right;
+      font-size:0.9rem; color:#666;
+    }
+    .options {
+      display:flex; flex-wrap:wrap; gap:1rem;
+      margin:1rem 0;
+    }
+    .switch { position:relative; display:inline-block;
+               width:50px; height:24px; }
+    .switch input { opacity:0; width:0; height:0; }
+    .slider {
+      position:absolute; cursor:pointer;
+      top:0; left:0; right:0; bottom:0;
+      background-color:#ccc; border-radius:24px;
+    }
+    .slider:before {
+      position:absolute; content:"";
+      height:18px; width:18px;
+      left:3px; bottom:3px;
+      background-color:white; border-radius:50%;
+      transition:transform var(--transition-speed);
+    }
+    input:checked + .slider {
+      background-color:var(--primary-color);
+    }
+    input:checked + .slider:before {
+      transform:translateX(26px);
+    }
+    .option-label {
+      display:flex; align-items:center;
+      font-size:0.95rem; color:#333; gap:0.5rem;
+    }
+    .buttons {
+      display:flex; gap:1rem;
+      justify-content:center; margin-top:1rem;
+    }
+    button {
+      background:var(--primary-color);
+      color:white; border:none;
+      padding:0.75rem 1.25rem; border-radius:8px;
+      font-size:1rem; cursor:pointer;
+      transition:background var(--transition-speed);
+    }
+    button:disabled {
+      background:#999; cursor:not-allowed;
+    }
+    button:not(:disabled):hover {
+      background:var(--accent-color);
+    }
+    .output-card {
+      background:var(--card-bg);
+      border:2px dashed #ccc;
+      border-radius:8px;
+      padding:1rem; margin-top:1.5rem;
+      min-height:60px;
+      display:flex; align-items:center;
+      justify-content:center;
+      text-align:center;
+      font-size:1.1rem; font-weight:500;
+      color:#444;
+    }
+    .fade-in {
+      animation:fadeIn var(--transition-speed) ease;
+    }
+    @keyframes fadeIn {
+      from { opacity:0; transform:translateY(10px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Sentence Scrambler</h1>
-        <textarea id="sentence" placeholder="Enter your sentence here..." rows="3"></textarea>
-        <div class="info"><span id="wordCount">0 words</span></div>
-        <div class="options">
-            <label class="option-label">
-                <div class="switch">
-                    <input type="checkbox" id="removePunctuation">
-                    <span class="slider"></span>
-                </div>
-                Remove punctuation
-            </label>
-            <label class="option-label">
-                <div class="switch">
-                    <input type="checkbox" id="removeCapitalization">
-                    <span class="slider"></span>
-                </div>
-                Remove capitalization
-            </label>
+  <div class="container">
+    <h1>Sentence Scrambler</h1>
+    <textarea id="sentence" placeholder="Enter your sentence here..." rows="3"></textarea>
+    <div class="info"><span id="wordCount">0 words</span></div>
+    <div class="options">
+      <label class="option-label">
+        <div class="switch">
+          <input type="checkbox" id="removePunctuation">
+          <span class="slider"></span>
         </div>
-        <div class="buttons">
-            <button id="scrambleBtn" disabled>Scramble!</button>
-            <button id="resetBtn">Reset</button>
+        Remove punctuation
+      </label>
+      <label class="option-label">
+        <div class="switch">
+          <input type="checkbox" id="removeCapitalization">
+          <span class="slider"></span>
         </div>
-        <div class="output-card fade-in" id="output">
-            Shuffled sentence will appear here.
-            <button id="copyBtn" disabled>Copy</button>
-        </div>
+        Remove capitalization
+      </label>
     </div>
+    <div class="buttons">
+      <button id="scrambleBtn" disabled>Scramble!</button>
+      <button id="resetBtn">Reset</button>
+      <button id="copyBtn" disabled>Copy</button>
+    </div>
+    <div class="output-card fade-in" id="output">
+      Shuffled sentence will appear here.
+    </div>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const sentenceEl = document.getElementById('sentence');
-            const wordCountEl = document.getElementById('wordCount');
-            const scrambleBtn = document.getElementById('scrambleBtn');
-            const resetBtn = document.getElementById('resetBtn');
-            const outputEl = document.getElementById('output');
-            const copyBtn = document.getElementById('copyBtn');
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sentenceEl = document.getElementById('sentence');
+      const wordCountEl = document.getElementById('wordCount');
+      const scrambleBtn = document.getElementById('scrambleBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const copyBtn = document.getElementById('copyBtn');
+      const outputEl = document.getElementById('output');
 
-            scrambleBtn.disabled = true;
-            copyBtn.disabled = true;
+      scrambleBtn.disabled = true;
+      copyBtn.disabled = true;
 
-            sentenceEl.addEventListener('input', () => {
-                const text = sentenceEl.value.trim();
-                const count = text ? text.split(/\s+/).length : 0;
-                wordCountEl.textContent = `${count} word${count !== 1 ? 's' : ''}`;
-                scrambleBtn.disabled = !text;
-            });
+      sentenceEl.addEventListener('input', () => {
+        const text = sentenceEl.value.trim();
+        const count = text ? text.split(/\s+/).length : 0;
+        wordCountEl.textContent = `${count} word${count!==1?'s':''}`;
+        scrambleBtn.disabled = !text;
+      });
 
-            function shuffleArray(arr) {
-                for (let i = arr.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [arr[i], arr[j]] = [arr[j], arr[i]];
-                }
-                return arr;
-            }
+      function shuffleArray(arr) {
+        for (let i = arr.length-1; i>0; i--) {
+          const j = Math.floor(Math.random()*(i+1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      }
 
-            scrambleBtn.addEventListener('click', () => {
-                let text = sentenceEl.value;
-                if (document.getElementById('removePunctuation').checked) {
-                    text = text.replace(/[^\w\s]|_/g, '').replace(/\s+/g, ' ');
-                }
-                if (document.getElementById('removeCapitalization').checked) {
-                    text = text.toLowerCase();
-                }
-                const words = shuffleArray(text.split(/\s+/));
-                const result = words.join(' ');
-                outputEl.firstChild.textContent = result || 'No words to shuffle.';
-                outputEl.classList.remove('fade-in');
-                void outputEl.offsetWidth;
-                outputEl.classList.add('fade-in');
+      scrambleBtn.addEventListener('click', () => {
+        let text = sentenceEl.value;
+        if (document.getElementById('removePunctuation').checked) {
+          text = text.replace(/[^\w\s]|_/g,'').replace(/\s+/g,' ');
+        }
+        if (document.getElementById('removeCapitalization').checked) {
+          text = text.toLowerCase();
+        }
+        const words = shuffleArray(text.split(/\s+/));
+        const result = words.join(' ');
+        outputEl.textContent = result||'No words to shuffle.';
+        outputEl.classList.remove('fade-in');
+        void outputEl.offsetWidth;
+        outputEl.classList.add('fade-in');
+        copyBtn.disabled = !result;
+      });
 
-                // Enable copy button now that we have output
-                copyBtn.disabled = !result;
-            });
+      resetBtn.addEventListener('click', () => {
+        sentenceEl.value = '';
+        document.getElementById('removePunctuation').checked = false;
+        document.getElementById('removeCapitalization').checked = false;
+        outputEl.textContent = 'Shuffled sentence will appear here.';
+        wordCountEl.textContent = '0 words';
+        scrambleBtn.disabled = true;
+        copyBtn.disabled = true;
+      });
 
-            resetBtn.addEventListener('click', () => {
-                sentenceEl.value = '';
-                document.getElementById('removePunctuation').checked = false;
-                document.getElementById('removeCapitalization').checked = false;
-                outputEl.firstChild.textContent = 'Shuffled sentence will appear here.';
-                wordCountEl.textContent = '0 words';
-                scrambleBtn.disabled = true;
-                copyBtn.disabled = true;
-            });
-
-            copyBtn.addEventListener('click', () => {
-                const textToCopy = outputEl.firstChild.textContent;
-                if (navigator.clipboard && textToCopy) {
-                    navigator.clipboard.writeText(textToCopy).then(() => {
-                        copyBtn.textContent = 'Copied!';
-                        setTimeout(() => copyBtn.textContent = 'Copy', 1500);
-                    });
-                }
-            });
-        });
-    </script>
+      copyBtn.addEventListener('click', () => {
+        const textToCopy = outputEl.textContent;
+        if (navigator.clipboard && textToCopy) {
+          navigator.clipboard.writeText(textToCopy).then(() => {
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => copyBtn.textContent = 'Copy', 1500);
+          });
+        }
+      });
+    });
+  </script>
 </body>
 </html>
