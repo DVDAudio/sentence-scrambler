@@ -148,6 +148,7 @@
             font-size: 1.1rem;
             font-weight: 500;
             color: #444;
+            position: relative;
         }
         .fade-in {
             animation: fadeIn var(--transition-speed) ease;
@@ -155,6 +156,18 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to   { opacity: 1; transform: translateY(0); }
+        }
+        /* Copy button styling inside the output card */
+        #copyBtn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.85rem;
+            background: var(--primary-color);
+        }
+        #copyBtn:hover {
+            background: var(--accent-color);
         }
     </style>
 </head>
@@ -183,7 +196,10 @@
             <button id="scrambleBtn" disabled>Scramble!</button>
             <button id="resetBtn">Reset</button>
         </div>
-        <div class="output-card fade-in" id="output">Shuffled sentence will appear here.</div>
+        <div class="output-card fade-in" id="output">
+            Shuffled sentence will appear here.
+            <button id="copyBtn" disabled>Copy</button>
+        </div>
     </div>
 
     <script>
@@ -193,8 +209,10 @@
             const scrambleBtn = document.getElementById('scrambleBtn');
             const resetBtn = document.getElementById('resetBtn');
             const outputEl = document.getElementById('output');
+            const copyBtn = document.getElementById('copyBtn');
 
             scrambleBtn.disabled = true;
+            copyBtn.disabled = true;
 
             sentenceEl.addEventListener('input', () => {
                 const text = sentenceEl.value.trim();
@@ -221,19 +239,33 @@
                 }
                 const words = shuffleArray(text.split(/\s+/));
                 const result = words.join(' ');
-                outputEl.textContent = result || 'No words to shuffle.';
+                outputEl.firstChild.textContent = result || 'No words to shuffle.';
                 outputEl.classList.remove('fade-in');
                 void outputEl.offsetWidth;
                 outputEl.classList.add('fade-in');
+
+                // Enable copy button now that we have output
+                copyBtn.disabled = !result;
             });
 
             resetBtn.addEventListener('click', () => {
                 sentenceEl.value = '';
                 document.getElementById('removePunctuation').checked = false;
                 document.getElementById('removeCapitalization').checked = false;
-                outputEl.textContent = 'Shuffled sentence will appear here.';
+                outputEl.firstChild.textContent = 'Shuffled sentence will appear here.';
                 wordCountEl.textContent = '0 words';
                 scrambleBtn.disabled = true;
+                copyBtn.disabled = true;
+            });
+
+            copyBtn.addEventListener('click', () => {
+                const textToCopy = outputEl.firstChild.textContent;
+                if (navigator.clipboard && textToCopy) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        copyBtn.textContent = 'Copied!';
+                        setTimeout(() => copyBtn.textContent = 'Copy', 1500);
+                    });
+                }
             });
         });
     </script>
